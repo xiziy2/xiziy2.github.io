@@ -14,13 +14,16 @@
           $links.removeClass('active');
           $link.addClass('active');
           var hash = $link.find('a').first()[0].hash.substr(1);
-          var $galleryItems = $('.gallery .gallery-item');
 
-          $galleryItems.stop().addClass('gallery-filter').fadeIn(100);
-
+          $('.gallery .gallery-expand')
+            .addClass('gallery-filter')
+            .stop()
+            .fadeIn(100);
           if (hash !== 'all') {
-            var $galleryFilteredOut = $galleryItems.not('.' + hash).not('.all');
-            $galleryFilteredOut.removeClass('gallery-filter').hide();
+            console.log($('.gallery .gallery-expand').not('.' + hash));
+            $('.gallery .gallery-expand').not('.' + hash)
+              .hide()
+              .removeClass('gallery-filter');
           }
 
           // transition layout
@@ -33,44 +36,19 @@
               transitionDuration: 0
             });
           });
-          setTimeout(function() {
-
           $masonry.masonry('layout');
-          }, 1000);
         });
       });
     }
 
 
 	  // Home
-	  $('.carousel:not(.carousel-slider)').carousel({
+	  $('.carousel').carousel({
       dist: 0,
       padding: 10
     });
-    $('.carousel.carousel-slider').carousel({
-      fullWidth: true,
-      indicators: true,
-      onCycleTo: function(el) {
-        $('.nav-background img').removeClass('active');
-        $('.nav-background img').eq(el.index()).addClass('active');
-      }
-    });
 
 
-    // Masonry Grid
-    var $masonry = $('.gallery');
-    $masonry.masonry({
-      // set itemSelector so .grid-sizer is not used in layout
-      itemSelector: '.gallery-filter',
-      // use element for option
-      columnWidth: '.gallery-filter',
-      // no transitions
-      transitionDuration: 0
-    });
-    // layout Masonry after each image loads
-    $masonry.imagesLoaded(function() {
-      $masonry.masonry('layout');
-    });
     $('a.filter').click(function (e) {
       e.preventDefault();
     });
@@ -99,9 +77,17 @@
 
     $('.blog .gallery-expand').galleryExpand({
       onShow: onShow,
-      fillScreen: true,
-      inDuration: 500,
+      fillScreen: true
     });
+
+    // Docs init
+    $('.gallery-expand.fill-screen').galleryExpand({
+      onShow: onShow,
+      fillScreen: true
+    });
+    var toc = $('.table-of-contents');
+    toc.pushpin({ top: toc.offset().top });
+    $('.scrollspy').scrollSpy();
 
 	}); // end of document ready
 })(jQuery); // end of jQuery name space
